@@ -6,22 +6,20 @@
   // 然后在 `content/` 路径中新建 `Entry/`路径，在其中添加 `index.typ` 作为 Entry 页的内容
   header-links: (
     "/": "Home",
-    "/Docs/": "Docs",
+    "/Notes/": "Notes",
     "/Blog/": "Blog",
-    "/CV/": "CV",
-    "/Changelog/": "Changelog",
   ),
   lang: "zh",
-  title: "Tufted Blog Template", // 你的网站在浏览器中显示的标题
+  title: "L's Blog", // 你的网站在浏览器中显示的标题
 
   // 自定义 header 和 footer 元素
   // 数组格式，可以添加任意数量的内容，内容之间使用换行分隔
   header-elements: (
     [你好],
-    [Ciallo～(∠・ω< )⌒☆],
+    [欢迎你来到我的博客～],
   ),
   footer-elements: (
-    "© 2026 Yousa-Mirage",
-    [Powered by #link("https://github.com/Yousa-Mirage/Tufted-Blog-Template")[Tufted-Blog-Template]],
+    "© 2026 Lawren",
+    [Powered by #link("https://github.com")[github]],
   ),
 )
