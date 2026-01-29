@@ -360,7 +360,8 @@ def run_typst_command(args: List[str]) -> bool:
 
 def build_html(force: bool = False):
     """
-    编译所有 .typ 文件为 HTML（文件名中包含 PDF 的除外）。
+    编译所有 .typ 文件为 HTML（文件名中包含 PDF 的除外），
+    并复制 content 目录下的已有 .html 文件。
 
     参数:
         force: 是否强制重建所有文件
@@ -368,13 +369,22 @@ def build_html(force: bool = False):
     typ_files = find_typ_files()
 
     # 排除标记为 PDF 的文件
-    html_files = [f for f in typ_files if "pdf" not in f.stem.lower()]
+    typ_html_files = [f for f in typ_files if "pdf" not in f.stem.lower()]
 
-    if not html_files:
-        print("  ⚠️ 未找到任何 HTML 文件。")
+    # 查找 content 目录下的已有 .html 文件
+    existing_html_files = []
+    if CONTENT_DIR.exists():
+        for html_file in CONTENT_DIR.rglob("*.html"):
+            # 检查路径中是否有以下划线开头的目录
+            parts = html_file.relative_to(CONTENT_DIR).parts
+            if not any(part.startswith("_") for part in parts):
+                existing_html_files.append(html_file)
+
+    if not typ_html_files and not existing_html_files:
+        print("  ⚠️ 未找到任何 HTML 或 .typ 文件。")
         return True
 
-    print("正在构建 HTML 文件...")
+    print("正在构建 HTML 页面...")
 
     # 获取公共依赖
     common_deps = find_common_dependencies()
@@ -383,7 +393,8 @@ def build_html(force: bool = False):
     skip_count = 0
     fail_count = 0
 
-    for typ_file in html_files:
+    # 处理 Typst 文件
+    for typ_file in typ_html_files:
         html_output = get_html_output_path(typ_file)
 
         # 增量编译检查
@@ -414,9 +425,28 @@ def build_html(force: bool = False):
             print(f"  ❌ {typ_file} 编译失败")
             fail_count += 1
 
+    # 处理已有 HTML 文件
+    for html_file in existing_html_files:
+        html_output = SITE_DIR / html_file.relative_to(CONTENT_DIR)
+
+        # 增量复制检查
+        if not force and html_output.exists():
+            if get_file_mtime(html_file) <= get_file_mtime(html_output):
+                skip_count += 1
+                continue
+
+        html_output.parent.mkdir(parents=True, exist_ok=True)
+
+        try:
+            shutil.copy2(html_file, html_output)
+            success_count += 1
+        except Exception as e:
+            print(f"  ❌ {html_file} 复制失败: {e}")
+            fail_count += 1
+
     status_parts = []
     if success_count > 0:
-        status_parts.append(f"编译: {success_count}")
+        status_parts.append(f"处理: {success_count}")
     if skip_count > 0:
         status_parts.append(f"跳过: {skip_count}")
     if fail_count > 0:
@@ -740,7 +770,7 @@ if __name__ == "__main__":
     # 执行对应的命令
     commands = {
         "build": lambda: build(force),
-        "html": lambda: (SITE_DIR.mkdir(parents=True, exist_ok=True), build_html(force))[1],
+        "html": lambda: (SITE_DIR.mkdir(parents=True, exist_ok=True), build_html(force), copy_content_assets(force))[2],
         "pdf": lambda: (SITE_DIR.mkdir(parents=True, exist_ok=True), build_pdf(force))[1],
         "assets": lambda: (SITE_DIR.mkdir(parents=True, exist_ok=True), copy_assets())[1],
         "clean": clean,
