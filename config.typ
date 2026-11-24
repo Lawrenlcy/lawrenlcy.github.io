@@ -6,10 +6,10 @@
   // 然后在 `content/` 路径中新建 `Entry/`路径，在其中添加 `index.typ` 作为 Entry 页的内容
   header-links: (
     "/": "Home",
-    "/Notes/": "Notes",
-    "/Blog/": "Blog",
+    "/#research": "Research",
+    "/#honors": "Honors",
   ),
-  lang: "zh",
+  lang: "en",
   title: "Chengye Liang",
   icon: "/assets/monogram.png",
 
@@ -20,6 +20,6 @@
   ),
   footer-elements: (
     "© 2026 Lawren",
-    [Powered by #link("https://github.com")[github]],
+    [Hosted on #link("https://pages.github.com/")[GitHub Pages]],
   ),
 )

@@ -63,11 +63,11 @@
         // 深色模式显示太阳图标（切换到浅色），浅色模式显示月亮图标（切换到深色）
         if (theme === "dark") {
             button.classList.add("is-dark");
-            button.setAttribute("aria-label", "切换到浅色模式");
+            button.setAttribute("aria-label", "Switch to light mode");
             button.innerHTML = ICONS.sun;
         } else {
             button.classList.remove("is-dark");
-            button.setAttribute("aria-label", "切换到深色模式");
+            button.setAttribute("aria-label", "Switch to dark mode");
             button.innerHTML = ICONS.moon;
         }
     }
@@ -87,7 +87,7 @@
         button.id = "theme-toggle";
         button.className = "theme-toggle-btn";
         button.type = "button";
-        button.setAttribute("aria-label", "切换主题");
+        button.setAttribute("aria-label", "Switch theme");
 
         button.addEventListener("click", toggleTheme);
 

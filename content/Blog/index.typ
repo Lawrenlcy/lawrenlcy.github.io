@@ -1,6 +1,6 @@
 #import "/config.typ": template, tufted
 #show: template.with(title: "Blog")
 
-= 博客 / Blog
+= Blog
 
-== 2026
+No posts yet.

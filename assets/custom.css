@@ -3,3 +3,16 @@ CUSTOM STYLES
 
 Add your custom CSS styles here to override or extend the default styles.
 *******************************************************************************/
+
+@media (max-width: 760px) {
+    header nav {
+        flex-wrap: wrap;
+        column-gap: 0.4em;
+        row-gap: 0;
+    }
+
+    header nav .theme-toggle-btn {
+        flex: 0 0 2.4rem;
+        margin-right: 0;
+    }
+}
